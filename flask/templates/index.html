@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Stream with Text</title>
+</head>
+<style>
+
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 4vmin;
+        margin: 0;
+    }
+
+    .main{
+        width: 100vw;
+        height: 100vh;
+        max-width: 100%;
+        max-height: 100%;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    img{
+        border-radius: 30px;
+        width: 45vw;
+        height: 70vh;
+        margin-bottom: 50px;
+    }
+
+    #content{
+        width: 40vw;
+        height: 62.5vh;
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+
+        overflow-y: auto;
+    }
+
+    button{
+        font-size: 2.4vh;
+        border: none;
+        font-weight: lighter;
+        padding: 1.5vmin;
+        border-radius: 15px;
+    
+
+        width: 20vw;
+        height: 7.5vh;
+
+        color: white;
+
+        background: linear-gradient(to right, rgb(241, 127, 127) 50%, rgb(98, 218, 255) 50%);
+        background-size: 200% 100%;
+        background-position: right bottom;
+        transition: all .5s ease-out;
+
+    }
+
+    button:hover {
+        background-position: left bottom;
+    }
+
+    #sign{
+        display: none;
+    }
+/* 
+    header{
+        text-align: center;
+        height: ;
+    } */
+
+    /* #trainImg{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-evenly;
+
+        width: 100vw;
+        max-width: 100%;
+        
+        >div{
+            text-align: center;
+            height: 300px;
+            width: 300px;
+
+            background-image: url(\thx.png);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            border-radius: 30px;
+        }
+    } */
+
+</style>
+<body>
+
+    <div class="main">
+        <h1 style="width: 100vw; max-width: 100%; text-align: center;">Sign Language Translator</h1>
+
+        <img src="{{ url_for('video_feed') }}" width="640" height="480"/>
+
+        <div style="margin-bottom: 50px;">
+            <button onclick="setDetect()">Translation Detection</button>
+            <button onclick="setTrain()">Similarity Detection</button>
+            <div id="content">
+                <p id="sentence"></p>
+                <p id="sign"></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    var train = document.getElementById("sign");
+    var detect = document.getElementById("sentence");
+
+    function getData() {
+        fetch('/data')
+            .then(response => response.json())
+            .then(data => document.getElementById('sentence').textContent = data.data);
+    }
+
+    function getSign() {
+        fetch('/sign')
+            .then(response => response.json())
+            .then(data => document.getElementById('sign').textContent = data.data);
+    }
+
+    function setTrain(){
+        document.getElementById("sign").style.display = "unset"
+        document.getElementById("sentence").style.display = "none"
+    }
+
+    function setDetect(){
+        document.getElementById("sign").style.display = "none"
+        document.getElementById("sentence").style.display = "unset"
+    }
+
+    setInterval(getData, 300);
+    setInterval(getSign, 300);
+    
+</script>
+
+</html>

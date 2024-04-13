@@ -1,0 +1,5 @@
+0 background
+1 ok
+2 not ok
+3 .
+4 thank you
